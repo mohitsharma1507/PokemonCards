@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
-import "./App.css";
+import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
+import Pagination from "../components/Pagination";
 
-function Pokemon() {
+function Home() {
   const [apiData, setApiData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -31,6 +37,10 @@ function Pokemon() {
     fetchData();
   }, []);
 
+  const handleView = (id) => {
+    navigate(`/pokemon/${id}`);
+  };
+
   const searchData = apiData
     ? apiData.filter((curPokemon) =>
         curPokemon.name.toLowerCase().includes(search.toLowerCase())
@@ -53,6 +63,10 @@ function Pokemon() {
     );
   }
 
+  const indexOfLast = currentPage * itemsPerPage;
+  const indexOfFirst = indexOfLast - itemsPerPage;
+  const currentItems = searchData.slice(indexOfFirst, indexOfLast);
+
   return (
     <section
       className="container"
@@ -69,7 +83,11 @@ function Pokemon() {
           Let's Catch Pikachu!
         </h1>
       </header>
-      <div className="searchBox" style={{ marginLeft: "3rem" }}>
+
+      <div
+        className="searchBox"
+        style={{ marginLeft: "43rem", marginTop: "-6rem" }}
+      >
         <input
           type="text"
           placeholder="search pokemon"
@@ -77,8 +95,14 @@ function Pokemon() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
+      <Pagination
+        totalItems={searchData.length}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
       <div className="row">
-        {searchData.map((curPokemon) => (
+        {currentItems.map((curPokemon) => (
           <div
             key={curPokemon.id}
             className="col-md-4 d-flex justify-content-center mb-4"
@@ -112,43 +136,13 @@ function Pokemon() {
                     .join(", ")}
                 </p>
               </div>
-              <div className="row text-center d-flex justify-content-around mb-3">
-                <div className="col">
-                  <p className="pokemon-info m-0">
-                    <b>Height:</b> {curPokemon.height}
-                  </p>
-                </div>
-                <div className="col">
-                  <p className="pokemon-info m-0">
-                    <b>Weight:</b> {curPokemon.weight}
-                  </p>
-                </div>
-                <div className="col">
-                  <p className="pokemon-info m-0">
-                    <b>Speed:</b> {curPokemon.stats[5].base_stat}
-                  </p>
-                </div>
-                <div className="col">
-                  <p className="pokemon-info m-0">
-                    <b>Id:</b> {curPokemon.id}
-                  </p>
-                </div>
-              </div>
-              <div className="row text-center mb-3">
-                <p className="m-0">
-                  <b>Experience:</b> {curPokemon.base_experience}
-                </p>
-                <p className="m-0">
-                  <b>Attack:</b> {curPokemon.stats[1].base_stat}
-                </p>
-                <p className="m-0">
-                  <b>Abilities:</b>{" "}
-                  {curPokemon.abilities
-                    .map((abilityInfo) => abilityInfo.ability.name)
-                    .slice(0, 1)
-                    .join(", ")}
-                </p>
-              </div>
+              <button
+                className="btn btn-success"
+                style={{ width: "125px", margin: "auto", marginBottom: "11px" }}
+                onClick={() => handleView(curPokemon.id)}
+              >
+                View Detail
+              </button>
             </div>
           </div>
         ))}
@@ -157,4 +151,4 @@ function Pokemon() {
   );
 }
 
-export default Pokemon;
+export default Home;
