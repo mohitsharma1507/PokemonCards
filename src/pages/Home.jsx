@@ -83,10 +83,17 @@ function Home() {
           Let's Catch Pikachu!
         </h1>
       </header>
-
+      <div className="FavoriteBtn" style={{ marginRight: "43rem" }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate("/favorites")}
+        >
+          Favorite
+        </button>
+      </div>
       <div
         className="searchBox"
-        style={{ marginLeft: "43rem", marginTop: "-6rem" }}
+        style={{ marginLeft: "43rem", marginTop: "-2.5rem" }}
       >
         <input
           type="text"

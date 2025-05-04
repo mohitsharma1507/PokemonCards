@@ -2,11 +2,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function PokemonCard({ pokemon, showBackButton = false }) {
+function PokemonCard({
+  small,
+  pokemon,
+  showBackButton = false,
+  isFavorite = false,
+  onToggleFavorite = () => {},
+}) {
   const navigate = useNavigate();
 
   return (
-    <div className="card shadow" style={{ width: "30rem" }}>
+    <div className="card shadow h-100">
       <div className="card-header text-center bg-primary text-white">
         <h2 className="mb-0">{pokemon.name.toUpperCase()}</h2>
       </div>
@@ -14,7 +20,11 @@ function PokemonCard({ pokemon, showBackButton = false }) {
         src={pokemon.sprites.other.dream_world.front_default}
         className="card-img-top mx-auto mt-3"
         alt={pokemon.name}
-        style={{ width: "180px" }}
+        style={{
+          width: small ? "80px" : "180px",
+          height: small ? "80px" : "150px",
+          objectFit: "contain",
+        }}
       />
       <div className="card-body">
         <h5 className="card-title text-center">Pokémon Details</h5>
@@ -49,9 +59,17 @@ function PokemonCard({ pokemon, showBackButton = false }) {
         </ul>
       </div>
       {showBackButton && (
-        <div className="card-footer text-center">
+        <div className="card-footer d-flex justify-content center gap-3">
           <button className="btn btn-secondary" onClick={() => navigate("/")}>
             Back to Home
+          </button>
+          <button
+            className={`btn ${
+              isFavorite ? "btn-danger" : "btn-outline-primary"
+            }`}
+            onClick={onToggleFavorite}
+          >
+            {isFavorite ? "💖 Remove Favorite" : "🤍 Add to Favorites"}
           </button>
         </div>
       )}
