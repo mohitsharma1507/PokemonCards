@@ -3,6 +3,7 @@ import DetailView from "./pages/DetailView";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import FavoritesPage from "./pages/Favorites";
+import ComparePokemon from "./components/ComparisonTool";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
         <Route path="/pokemon/:id" element={<DetailView />}></Route>
         <Route path="/favorites" element={<FavoritesPage />}></Route>
         <Route path="*" element={<NotFound />}></Route>
+        <Route path="/compare" element={<ComparePokemon />}></Route>
       </Routes>
     </BrowserRouter>
   );

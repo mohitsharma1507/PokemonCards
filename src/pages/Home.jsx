@@ -91,6 +91,14 @@ function Home() {
           Favorite
         </button>
       </div>
+      <div className="FavoriteBtn" style={{ marginRight: "43rem" }}>
+        <button
+          className="btn btn-primary"
+          onClick={() => navigate("/compare")}
+        >
+          Compare
+        </button>
+      </div>
       <div
         className="searchBox"
         style={{ marginLeft: "43rem", marginTop: "-2.5rem" }}
