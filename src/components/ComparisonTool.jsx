@@ -15,6 +15,17 @@ export default function ComparePokemon() {
     return await res.json();
   };
 
+  const getRandomPokemon = async (setFn) => {
+    const id = Math.floor(Math.random() * 898) + 1;
+    try {
+      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+      const data = await res.json();
+      setFn(data.name);
+    } catch {
+      setError("Failed to fetch random Pokémon.");
+    }
+  };
+
   const handleCompare = async () => {
     try {
       setError("");
@@ -31,29 +42,54 @@ export default function ComparePokemon() {
   return (
     <div className="container py-4">
       <h2 className="text-center mb-4">Compare Two Pokémon</h2>
-      <div className="mb-3">
-        <input
-          type="text"
-          className="form-control w-25"
-          placeholder="First Pokémon"
-          value={pokemon1}
-          onChange={(e) => setPokemon1(e.target.value)}
-        />
-        <input
-          type="text"
-          className="form-control w-25"
-          placeholder="Second Pokémon"
-          value={pokemon2}
-          onChange={(e) => setPokemon2(e.target.value)}
-        />
-        <button
-          className="btn btn-primary"
-          style={{ marginLeft: "35rem" }}
-          onClick={handleCompare}
-        >
-          Compare
-        </button>
+
+      <div className="d-flex flex-wrap justify-content-center align-items-end gap-3 mb-4">
+        <div className="d-flex flex-column align-items-center">
+          <input
+            type="text"
+            className="form-control mb-2"
+            placeholder="First Pokémon"
+            value={pokemon1}
+            onChange={(e) => setPokemon1(e.target.value)}
+            style={{ minWidth: "220px" }}
+          />
+          <button
+            className="btn btn-outline-secondary btn-sm"
+            style={{ width: "220px", height: "40px" }}
+            onClick={() => getRandomPokemon(setPokemon1)}
+          >
+            🎲 Random First
+          </button>
+        </div>
+
+        <div className="d-flex flex-column align-items-center">
+          <input
+            type="text"
+            className="form-control mb-2"
+            placeholder="Second Pokémon"
+            value={pokemon2}
+            onChange={(e) => setPokemon2(e.target.value)}
+            style={{ minWidth: "220px" }}
+          />
+          <button
+            className="btn btn-outline-secondary btn-sm"
+            style={{ width: "220px", height: "40px" }}
+            onClick={() => getRandomPokemon(setPokemon2)}
+          >
+            🎲 Random Second
+          </button>
+        </div>
+        <div>
+          <button
+            className="btn btn-primary"
+            onClick={handleCompare}
+            disabled={!pokemon1 || !pokemon2}
+          >
+            Compare
+          </button>
+        </div>
       </div>
+
       {error && <div className="alert alert-danger text-center">{error}</div>}
 
       {compareData && (
